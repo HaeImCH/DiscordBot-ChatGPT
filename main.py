@@ -79,7 +79,6 @@ async def on_message(message):
 
 @client.event
 async def on_ready():
-    chatbot.login(Email,Password)
     print("\033[H\033[J", end="")
     print('已登入機器人: ')
     print(client.user.name)

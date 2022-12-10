@@ -1,16 +1,16 @@
 import discord
 import asyncio
-from chatgpt import Conversation
+from revChatGPT.revChatGPT import Chatbot
 import typing
 import functools
 import nest_asyncio
 import time
 
 #==============================[這裡填入資料]==============================
-TOKEN = '' #Discord機器人的Token
+TOKEN = '' #Discord Bot Token
 Email = '' #OpenAI 帳號
 Password = ''
-channel_id = 1234567890
+channel_id = 1234567890123456789
 loading = "" #https://cdn.discordapp.com/attachments/938085805182844949/1050810307947274372/SH_Loading_Discord.gif
 tick = "" #https://cdn.discordapp.com/attachments/938085805182844949/1050810307683041310/1040573768650731551.png
 cross = "" #https://cdn.discordapp.com/attachments/938085805182844949/1050810307326529586/1040573770320052235.png
@@ -20,7 +20,12 @@ timeout_sec = 600 #等待OpenAI的秒數
 nest_asyncio.apply()
 intents = discord.Intents.all()
 client = discord.Client(intents=intents)
-conversation = Conversation(timeout=timeout_sec)
+config = {
+    "email": Email,
+    "password": Password,
+}
+
+chatbot = Chatbot(config,conversation_id=None,request_timeout=600)
 
 def current_time():
     t = time.localtime()
@@ -45,21 +50,23 @@ async def on_message(message):
         print("[INFO] "+"["+current_time()+"] "+"正在傳送訊息給OpenAI")
         
         try:
-            reply = asyncio.run(NotBlocking(conversation.chat,message.content))
+            reply = asyncio.run(NotBlocking(chatbot.get_chat_response,message.content, output="text",))['message']
             print("==============================[SUCCESS]==============================")
             print("[INFO] "+"["+current_time()+"] "+"已成功傳送訊息給OpenAI -- Done")
+            print("[INFO] "+"["+current_time()+"] "+"字數: ",len(reply))
             await message.add_reaction(tick)
             #print(reply)
-            print("[INFO] "+"["+current_time()+"] "+"字數: ",len(reply))
         except Exception as e: 
             print("==============================[ERROR]==============================")
             e = str(e)
             reply = "OpenAI沒有回答這個問題呢,再試一次看看? " + "["+e+"]"
-            await message.remove_reaction(loading,client.user)
-            await message.add_reaction(cross)
-            conversation.reset()
             print("[ERROR] "+"["+current_time()+"] "+"傳送訊息給OpenAI失敗 -- Error")
             print("[ERROR] "+"["+current_time()+"] "+e)
+            chatbot.reset_chat()
+            chatbot.refresh_headers()
+            chatbot.refresh_session()
+            await message.remove_reaction(loading,client.user)
+            await message.add_reaction(cross)
 
         reply_len = int(len(reply))
         if (reply_len/1000) > (reply_len//1000):
@@ -72,13 +79,11 @@ async def on_message(message):
 
 @client.event
 async def on_ready():
-    #login_info = conversation.login(Email,Password)
-    #conversation.write_config()
+    chatbot.login(Email,Password)
     print("\033[H\033[J", end="")
     print('已登入機器人: ')
     print(client.user.name)
     print(client.user.id)
     print('------')
-    #print(login_info["accessToken"]) #查看access_token
 
 client.run(TOKEN)

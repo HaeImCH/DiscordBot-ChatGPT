@@ -1,0 +1,4 @@
+discord.py
+revChatGPT
+typing
+nest_asyncio

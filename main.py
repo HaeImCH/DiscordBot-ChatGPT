@@ -7,15 +7,29 @@ import nest_asyncio
 import time
 
 #==============================[這裡填入資料]==============================
-TOKEN = '' #Discord Bot Token
+TOKEN = ''
 Email = '' #OpenAI 帳號
 Password = ''
-channel_id = 1234567890123456789
+channel_id = 
 loading = "" #https://cdn.discordapp.com/attachments/938085805182844949/1050810307947274372/SH_Loading_Discord.gif
 tick = "" #https://cdn.discordapp.com/attachments/938085805182844949/1050810307683041310/1040573768650731551.png
 cross = "" #https://cdn.discordapp.com/attachments/938085805182844949/1050810307326529586/1040573770320052235.png
 timeout_sec = 600 #等待OpenAI的秒數
 #==============================[這裡填入資料]==============================
+
+class CaptchaSolver:
+    @staticmethod
+    def solve_captcha(raw_svg):
+        # Get the SVG
+        svg = raw_svg
+        # Save the SVG
+        with open("captcha.svg", "w") as f:
+            print("Captcha saved to captcha.svg")
+            f.write(svg)
+        # Get input
+        solution = input("Please solve the captcha: ")
+        # Return the solution
+        return solution
 
 nest_asyncio.apply()
 intents = discord.Intents.all()
@@ -25,7 +39,7 @@ config = {
     "password": Password,
 }
 
-chatbot = Chatbot(config,conversation_id=None,request_timeout=600)
+chatbot = Chatbot(config,conversation_id=None,request_timeout=600,captcha_solver=CaptchaSolver())
 
 def current_time():
     t = time.localtime()

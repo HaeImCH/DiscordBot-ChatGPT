@@ -1,45 +1,30 @@
 import discord
 import asyncio
-from revChatGPT.revChatGPT import Chatbot
+from revChatGPT.ChatGPT import Chatbot
 import typing
 import functools
 import nest_asyncio
 import time
 
 #==============================[這裡填入資料]==============================
-TOKEN = ''
-Email = '' #OpenAI 帳號
-Password = ''
-channel_id = 
-loading = "" #https://cdn.discordapp.com/attachments/938085805182844949/1050810307947274372/SH_Loading_Discord.gif
-tick = "" #https://cdn.discordapp.com/attachments/938085805182844949/1050810307683041310/1040573768650731551.png
-cross = "" #https://cdn.discordapp.com/attachments/938085805182844949/1050810307326529586/1040573770320052235.png
-timeout_sec = 600 #等待OpenAI的秒數
+TOKEN = '' #Discord 機器人的Token
+#OpenAI Token
+OpenAI_Token = ''
+channel_id = 1234567890
+loading = "<a:SH_Loading_Discord:1050803778145751092>" #https://cdn.discordapp.com/attachments/938085805182844949/1050810307947274372/SH_Loading_Discord.gif
+tick = "<:1040573768650731551:1050805799091458098>" #https://cdn.discordapp.com/attachments/938085805182844949/1050810307683041310/1040573768650731551.png
+cross = "<:1040573770320052235:1050806323547226292>" #https://cdn.discordapp.com/attachments/938085805182844949/1050810307326529586/1040573770320052235.png
 #==============================[這裡填入資料]==============================
 
-class CaptchaSolver:
-    @staticmethod
-    def solve_captcha(raw_svg):
-        # Get the SVG
-        svg = raw_svg
-        # Save the SVG
-        with open("captcha.svg", "w") as f:
-            print("Captcha saved to captcha.svg")
-            f.write(svg)
-        # Get input
-        solution = input("Please solve the captcha: ")
-        # Return the solution
-        return solution
 
 nest_asyncio.apply()
 intents = discord.Intents.all()
 client = discord.Client(intents=intents)
 config = {
-    "email": Email,
-    "password": Password,
+    "session_token": OpenAI_Token,
 }
 
-chatbot = Chatbot(config,conversation_id=None,request_timeout=600,captcha_solver=CaptchaSolver())
+chatbot = Chatbot(config,conversation_id=None)
 
 def current_time():
     t = time.localtime()
@@ -64,7 +49,7 @@ async def on_message(message):
         print("[INFO] "+"["+current_time()+"] "+"正在傳送訊息給OpenAI")
         
         try:
-            reply = asyncio.run(NotBlocking(chatbot.get_chat_response,message.content, output="text",))['message']
+            reply = asyncio.run(NotBlocking(chatbot.ask,message.content))['message']
             print("==============================[SUCCESS]==============================")
             print("[INFO] "+"["+current_time()+"] "+"已成功傳送訊息給OpenAI -- Done")
             print("[INFO] "+"["+current_time()+"] "+"字數: ",len(reply))
@@ -76,9 +61,6 @@ async def on_message(message):
             reply = "OpenAI沒有回答這個問題呢,再試一次看看? " + "["+e+"]"
             print("[ERROR] "+"["+current_time()+"] "+"傳送訊息給OpenAI失敗 -- Error")
             print("[ERROR] "+"["+current_time()+"] "+e)
-            chatbot.reset_chat()
-            chatbot.refresh_headers()
-            chatbot.refresh_session()
             await message.remove_reaction(loading,client.user)
             await message.add_reaction(cross)
 

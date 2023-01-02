@@ -4,6 +4,7 @@
 pip3 insatll -r requirements.txt
 
 Edit main.py
+
 ![](https://media.discordapp.net/attachments/846907280368599060/1059473292819439706/image.png "Edit main.py")
 
 make sure you add emojis to discord server

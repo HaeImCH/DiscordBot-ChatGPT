@@ -11,9 +11,9 @@ TOKEN = '' #Discord 機器人的Token
 #OpenAI Token
 OpenAI_Token = ''
 channel_id = 1234567890
-loading = "<a:SH_Loading_Discord:1050803778145751092>" #https://cdn.discordapp.com/attachments/938085805182844949/1050810307947274372/SH_Loading_Discord.gif
-tick = "<:1040573768650731551:1050805799091458098>" #https://cdn.discordapp.com/attachments/938085805182844949/1050810307683041310/1040573768650731551.png
-cross = "<:1040573770320052235:1050806323547226292>" #https://cdn.discordapp.com/attachments/938085805182844949/1050810307326529586/1040573770320052235.png
+loading = "" #https://cdn.discordapp.com/attachments/938085805182844949/1050810307947274372/SH_Loading_Discord.gif
+tick = "" #https://cdn.discordapp.com/attachments/938085805182844949/1050810307683041310/1040573768650731551.png
+cross = "" #https://cdn.discordapp.com/attachments/938085805182844949/1050810307326529586/1040573770320052235.png
 #==============================[這裡填入資料]==============================
 
 

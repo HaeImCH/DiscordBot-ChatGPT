@@ -1,4 +1,4 @@
 discord.py
-revChatGPT
+revChatGPT[unofficial]
 typing
 nest_asyncio

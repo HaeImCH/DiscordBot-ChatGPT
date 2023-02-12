@@ -1,7 +1,7 @@
 # DiscordBot-ChatGPT
 ## 中文版請看這 [點此](https://blog.thisisch.net/make-a-ai-discord-bot-with-chatgpt-and-on-github/)
 ## Usage
-pip3 insatll -r requirements.txt
+pip3 install -r requirements.txt
 
 Edit main.py
 

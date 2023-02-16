@@ -2,3 +2,4 @@ discord.py
 revChatGPT
 typing
 nest_asyncio
+undetected_chromedriver

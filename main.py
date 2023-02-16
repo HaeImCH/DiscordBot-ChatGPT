@@ -1,6 +1,6 @@
 import discord
 import asyncio
-from revChatGPT.Unofficial import Chatbot
+from revChatGPT.V1 import Chatbot
 import typing
 import functools
 import nest_asyncio

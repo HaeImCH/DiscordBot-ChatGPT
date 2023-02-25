@@ -16,12 +16,12 @@ tick = "" #https://cdn.discordapp.com/attachments/938085805182844949/10508103076
 cross = "" #https://cdn.discordapp.com/attachments/938085805182844949/1050810307326529586/1040573770320052235.png
 #==============================[這裡填入資料]==============================
 
-
+#2023/2/25 since i dont wanna change the blog so still session_token login only uwu
 nest_asyncio.apply()
 intents = discord.Intents.all()
 client = discord.Client(intents=intents)
 config = {
-    "session_token": OpenAI_Token,
+    "session_token": OpenAI_Token
 }
 
 chatbot = Chatbot(config,conversation_id=None)
@@ -49,7 +49,9 @@ async def on_message(message):
         print("[INFO] "+"["+current_time()+"] "+"正在傳送訊息給OpenAI")
         
         try:
-            reply = asyncio.run(NotBlocking(chatbot.ask,message.content))['message']
+            for data in asyncio.run(NotBlocking(chatbot.ask,message.content)):
+                reply = data["message"]
+            print(reply)
             print("==============================[SUCCESS]==============================")
             print("[INFO] "+"["+current_time()+"] "+"已成功傳送訊息給OpenAI -- Done")
             print("[INFO] "+"["+current_time()+"] "+"字數: ",len(reply))
